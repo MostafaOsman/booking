@@ -2,10 +2,11 @@ from rest_framework import serializers
 from rest_framework.serializers import DecimalField
 from rest_framework.serializers import ModelSerializer
 
-from booking.models import Customer, Studio
 
 class AddressSerializer(serializers.ModelSerializer):
-    
+    class Meta:
+        model = Address
+        fields = ['city','district','building_number']
 
 
 class StudioSerializer(serializers.ModelSerializer):
@@ -18,10 +19,11 @@ class StudioSerializer(serializers.ModelSerializer):
         #price= serializers.DecimalField(read_only=True)
 
 class CustomerSerializer(serializers.ModelSerializer):
-    adress = serializers.
+    #address = serializers.
     class Meta:
         model = Customer
         fields = ['user_name','email','first_name','last_name','birth_date']
+
 
 
 
