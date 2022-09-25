@@ -1,6 +1,7 @@
 from rest_framework import serializers
 from rest_framework.serializers import DecimalField
 from rest_framework.serializers import ModelSerializer
+from .models import Address, Studio, Guest
 
 
 class AddressSerializer(serializers.ModelSerializer):
@@ -18,11 +19,20 @@ class StudioSerializer(serializers.ModelSerializer):
         #address= serializers.CharField(read_only=True)
         #price= serializers.DecimalField(read_only=True)
 
-class CustomerSerializer(serializers.ModelSerializer):
-    #address = serializers.
+
+
+class CreateGuestSerializer(serializers.ModelSerializer):
+    address = AddressSerializer()
     class Meta:
-        model = Customer
-        fields = ['user_name','email','first_name','last_name','birth_date']
+        model = Guest 
+        fields=['username','password','email','first_name','last_name','birth_date','address'] 
+
+    def create(self, validated_data):
+        address_data= validated_data.pop('address')
+        address = Address.objects.create(**address_data)
+        validated_data['address'] =address
+        return super().create(validated_data)
+
 
 
 
