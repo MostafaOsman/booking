@@ -9,6 +9,9 @@ from pprint import pprint
 
 
 router = routers.DefaultRouter()
-router.register('guests',views.GuestViewSet,'guests')
+router.register('guest',views.GuestViewSet,'guest')
+router.register('studio',views.CreateStudioViewSet,'studio')
+router.register('owner',views.CreateOwnerViewSet,'owner')
+router.register('reservation',views.ReservationViewSet,'reservation')
 
 urlpatterns = router.urls 

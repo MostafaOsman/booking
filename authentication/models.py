@@ -7,7 +7,7 @@ class User(AbstractBaseUser,PermissionsMixin):
     email = models.EmailField(unique=True,null=True)
     first_name= models.CharField(max_length=255)
     last_name = models.CharField(max_length=255)
-    birth_date= models.DateField(auto_now_add=True, null=True)
+    birth_date= models.DateField()
 
 
     ROLE_HOST= 'H'
@@ -15,9 +15,9 @@ class User(AbstractBaseUser,PermissionsMixin):
     ROLE_ADMIN= 'A'
     ROLE_CHOICES = [
     #user will see this value
-        (ROLE_HOST,'Host'),
-        (ROLE_GUEST,'Guest'),
-        (ROLE_ADMIN,'Admin')]
+    (ROLE_HOST,'Host'),
+    (ROLE_GUEST,'Guest'),
+    (ROLE_ADMIN,'Admin')]
        
     role = models.CharField(choices=ROLE_CHOICES,default=ROLE_GUEST,max_length=255)
 
