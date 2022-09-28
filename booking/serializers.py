@@ -11,7 +11,7 @@ class AddressSerializer(serializers.ModelSerializer):
 class CreateOwnerSerializer(serializers.ModelSerializer):
     class Meta:
         model=  Owner
-        fields= ['id','username','password','email','first_name','last_name','birth_date']
+        fields= ['id','username','password','email','first_name','last_name','birth_date','role']
 
 
 class CreateStudioSerializer(serializers.ModelSerializer):
@@ -56,7 +56,7 @@ class ReservationSerializer(serializers.ModelSerializer):
         fields= ['id','guest','start_date','end_date']
 
 
-    
+
 
 
  

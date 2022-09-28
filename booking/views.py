@@ -6,11 +6,9 @@ from booking.serializers import CreateGuestSerializer, CreateOwnerSerializer, Cr
  
 
 class GuestViewSet(ModelViewSet):
-
+    http_method_names = ['get','post','patch','delete','head','options']
     queryset = Guest.objects.select_related('address').all()
     serializer_class = CreateGuestSerializer
-
-
 
 class CreateStudioViewSet(ModelViewSet):
     queryset = Studio.objects.select_related('address').all()
@@ -18,9 +16,9 @@ class CreateStudioViewSet(ModelViewSet):
 
 
 class CreateOwnerViewSet(ModelViewSet):
-     queryset = Owner.objects.all()
-     serializer_class= CreateOwnerSerializer
-
+    http_method_names = ['get','post','patch','delete','head','options']
+    queryset = Owner.objects.all()
+    serializer_class = CreateOwnerSerializer
 class ReservationViewSet(ModelViewSet):
         queryset = Reservation.objects.select_related('guest').all()
         serializer_class= ReservationSerializer          

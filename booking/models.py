@@ -16,7 +16,7 @@ class Guest(USER):
     
 
 class Owner(USER):
-    pass    
+    pass
 
 class Studio(models.Model):
     id = models.IntegerField(primary_key=True)
