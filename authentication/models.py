@@ -1,5 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import AbstractBaseUser,PermissionsMixin
+from django.contrib.auth.models import UserManager
 
 # Create your models here.
 class User(AbstractBaseUser,PermissionsMixin):
@@ -7,9 +8,8 @@ class User(AbstractBaseUser,PermissionsMixin):
     email = models.EmailField(unique=True,null=True)
     first_name= models.CharField(max_length=255)
     last_name = models.CharField(max_length=255)
-    birth_date= models.DateField()
-
-
+    birth_date= models.DateField(null=True)
+    is_staff = models.BooleanField(default=False)
     ROLE_HOST= 'H'
     ROLE_GUEST= 'G'
     ROLE_ADMIN= 'A'
@@ -20,8 +20,12 @@ class User(AbstractBaseUser,PermissionsMixin):
     (ROLE_ADMIN,'Admin')]
        
     role = models.CharField(choices=ROLE_CHOICES,default=ROLE_GUEST,max_length=255)
-
+    
     USERNAME_FIELD = 'username'
+
+    objects = UserManager()
+    
+
     
     
     

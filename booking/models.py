@@ -1,4 +1,7 @@
+from typing import Generic
 from django.contrib.auth import get_user_model
+from django.contrib.contenttypes.models import ContentType
+from django.contrib.contenttypes.fields import GenericForeignKey, GenericRelation
 from django.db import models
 from django.core.validators import MaxValueValidator, MinValueValidator
 import uuid
@@ -7,13 +10,16 @@ class Address(models.Model):
     city= models.CharField(max_length=255)
     district = models.CharField(max_length=255)
     building_number= models.PositiveIntegerField()
-
+    #foreign key: many to one relationship
+    content_type = models.ForeignKey(ContentType, on_delete = models.CASCADE)
+    object_id = models.PositiveIntegerField()
+    content_object = GenericForeignKey("content_type","object_id")
 
 USER = get_user_model()
 
 class Guest(USER):
-    address = models.OneToOneField(Address, on_delete=models.PROTECT,related_name='address')
-    
+   # address = models.OneToOneField(Address, on_delete=models.PROTECT,related_name='address')
+    address= GenericRelation(Address)
 
 class Owner(USER):
     pass
@@ -21,7 +27,8 @@ class Owner(USER):
 class Studio(models.Model):
     id = models.IntegerField(primary_key=True)
     number_of_guests= models.PositiveIntegerField()
-    address = models.OneToOneField(Address,on_delete=models.CASCADE)
+    #address = models.OneToOneField(Address,on_delete=models.CASCADE)
+    address = GenericRelation(Address)
     price= models.DecimalField(max_digits=6,
     decimal_places=2, validators= [MinValueValidator(1)])
     owner = models.ForeignKey(Owner,on_delete=models.CASCADE,related_name='studios',null=True)
