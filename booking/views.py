@@ -1,24 +1,24 @@
 from django.shortcuts import render
 from rest_framework.viewsets import ModelViewSet
 from booking.models import Guest, Reservation, Studio, Owner
-from booking.serializers import CreateGuestSerializer, CreateOwnerSerializer, CreateStudioSerializer, ReservationSerializer
+from booking.serializers import GuestSerializer, CreateOwnerSerializer, StudioSerializer, ReservationSerializer
 # Create your views here.
  
 
 class GuestViewSet(ModelViewSet):
-    http_method_names = ['get','post','patch','delete','head','options']
-    queryset = Guest.objects.select_related('address').all()
-    serializer_class = CreateGuestSerializer
+    queryset = Guest.objects.all()
+    serializer_class = GuestSerializer
 
 class CreateStudioViewSet(ModelViewSet):
-    queryset = Studio.objects.select_related('address').all()
-    serializer_class = CreateStudioSerializer
+    queryset = Studio.objects.all()
+    serializer_class = StudioSerializer
 
 
 class CreateOwnerViewSet(ModelViewSet):
     http_method_names = ['get','post','patch','delete','head','options']
     queryset = Owner.objects.all()
     serializer_class = CreateOwnerSerializer
+    
 class ReservationViewSet(ModelViewSet):
         queryset = Reservation.objects.select_related('guest').all()
         serializer_class= ReservationSerializer          
