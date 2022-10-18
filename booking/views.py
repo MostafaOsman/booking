@@ -18,7 +18,10 @@ class CreateOwnerViewSet(ModelViewSet):
     http_method_names = ['get','post','patch','delete','head','options']
     queryset = Owner.objects.all()
     serializer_class = CreateOwnerSerializer
-    
+             
+
 class ReservationViewSet(ModelViewSet):
-        queryset = Reservation.objects.select_related('guest').all()
-        serializer_class= ReservationSerializer          
+    queryset = Reservation.objects.all() 
+    serializer_class= ReservationSerializer
+        
+    

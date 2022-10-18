@@ -1,4 +1,5 @@
 from ast import Add
+from venv import create
 from wsgiref import validate
 from rest_framework import serializers
 from rest_framework.serializers import DecimalField
@@ -19,13 +20,14 @@ class GuestSerializer(serializers.ModelSerializer):
     address = AddressSerializer()
     class Meta:
         model = Guest 
-        fields=['id','username','password','email','first_name','last_name','birth_date','address']
+        fields=['id','username','password','email','first_name','last_name','birth_date','role','address']
         
     def create(self, validated_data):
         address_data = validated_data.pop('address')
         with transaction.atomic():
             address = Address.objects.create(**address_data)
-            guest=Guest.objects.create(address_id= address.id, **validated_data)
+            guest=Guest.objects.create(address_id= address.id, 
+            **validated_data)
             #guest.address = address
         return guest
     
@@ -60,16 +62,19 @@ class StudioSerializer(serializers.ModelSerializer):
     address = AddressSerializer()
     class Meta:
         model = Studio
-        fields= ['id','number_of_guests','address','price']
+        fields= ['id','title','price','number_of_guests','owner','address']
 
 
     def create(self, validated_data):
+        # do i create a new address with every studio? yeah so make this step
+        #otherwise dont write the pop step like in case of owner
         address_data= validated_data.pop('address')
         with transaction.atomic():
             address = Address.objects.create(**address_data)
             studio = Studio.objects.create(address_id = address.id ,**validated_data)
             studio.address=address
-            return studio       
+            return studio
+
         
 
     def update(self, instance, validated_data):
@@ -91,22 +96,32 @@ class CreateOwnerSerializer(serializers.ModelSerializer):
         model=  Owner
         fields= ['id','username','password','email','first_name','last_name','birth_date','role']
 
-   
+class SimpleOwnerSerializer(serializers.ModelSerializer):
+       class Meta:
+        model=  Owner
+        fields = ['username']
+
+class SimpleStudioSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Studio
+        fields= ['title']
 
 class SimpleGuestSerializer(serializers.ModelSerializer):
     class Meta:
-        model= Guest
-        exclude = ['password','email','first_name','last_name','birth_date','address']
-
-
-
-
-
+        model = Guest
+        fields= ['username']
 
 class ReservationSerializer(serializers.ModelSerializer):
+    guest = SimpleGuestSerializer()
+    studio = SimpleStudioSerializer(read_only=True)
     class Meta:
         model = Reservation
-        fields= ['start_date','end_date']
+        fields= ['adults','children','check_in','check_out','studio','guest']
+        # studio address bt3o ka data w gwah el owner
+        # #guest esm 
+
+    
+     
 
 
 

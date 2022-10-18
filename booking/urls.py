@@ -14,4 +14,6 @@ router.register('studio',views.CreateStudioViewSet,'studio')
 router.register('owner',views.CreateOwnerViewSet,'owner')
 router.register('reservation',views.ReservationViewSet,'reservation')
 
-urlpatterns = router.urls 
+
+
+urlpatterns = router.urls

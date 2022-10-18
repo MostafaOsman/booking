@@ -1,3 +1,5 @@
+from email.policy import default
+from time import timezone
 from typing import Generic
 from django.contrib.auth import get_user_model
 from django.contrib.contenttypes.models import ContentType
@@ -21,12 +23,16 @@ class Owner(USER):
     pass
 
 class Studio(models.Model):
-    id = models.IntegerField(primary_key=True)
-    number_of_guests= models.PositiveIntegerField()
-    address = models.ForeignKey(Address,on_delete=models.CASCADE)
+    title= models.CharField(max_length=255)
+    number_of_guests= models.PositiveIntegerField(default=1)
+    address = models.OneToOneField(Address,on_delete=models.CASCADE)
     price= models.DecimalField(max_digits=6,
     decimal_places=2, validators= [MinValueValidator(1)])
-    owner = models.ForeignKey(Owner,on_delete=models.CASCADE,related_name='studios',null=True)
+    owner = models.ForeignKey(Owner,on_delete=models.CASCADE,related_name='studios')
+
+    def __str__(self) -> str:
+        return self.title
+    
 
 
 class Reservation(models.Model):
@@ -40,6 +46,8 @@ class Reservation(models.Model):
         (STATUS_NON_ACTIVE,'Non Active')]
     status = models.CharField(choices=STATUS_CHOICES,default=STATUS_NON_ACTIVE,max_length=50)
     guest = models.ForeignKey(Guest,on_delete= models.CASCADE,related_name='guest')
-    start_date= models.DateTimeField()
-    end_date= models.DateTimeField()
+    adults = models.PositiveIntegerField(default=0)
+    children = models.PositiveIntegerField(default=0)
+    check_in= models.DateTimeField()
+    check_out= models.DateTimeField()
 
