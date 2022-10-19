@@ -7,6 +7,8 @@ from rest_framework.serializers import ModelSerializer
 from .models import Address, Owner, Studio, Guest, Reservation
 from rest_framework import serializers
 from django.db import transaction
+from django.utils import timezone
+
 
 
 class AddressSerializer(serializers.ModelSerializer):
@@ -102,29 +104,67 @@ class SimpleOwnerSerializer(serializers.ModelSerializer):
         fields = ['username']
 
 class SimpleStudioSerializer(serializers.ModelSerializer):
+    address = AddressSerializer()
     class Meta:
         model = Studio
-        fields= ['title']
+        fields= ['title','address']
 
 class SimpleGuestSerializer(serializers.ModelSerializer):
     class Meta:
         model = Guest
-        fields= ['username']
+        fields= ['username','email','full_name']
+        
+    full_name = serializers.SerializerMethodField(method_name='get_full_name')
+
+    def get_full_name(self, guest:Guest):
+        return f'{guest.first_name} {guest.last_name}'
+
 
 class ReservationSerializer(serializers.ModelSerializer):
-    guest = SimpleGuestSerializer()
-    studio = SimpleStudioSerializer(read_only=True)
+    
     class Meta:
         model = Reservation
         fields= ['adults','children','check_in','check_out','studio','guest']
-        # studio address bt3o ka data w gwah el owner
-        # #guest esm 
 
-    
      
+        # studio address bt3o ka data w gwah el owner
+        # #guest esm
+        # full_name = serializers.SerializerMethodField(method_name='get_full_name')
+        
 
 
+    def validate(self, data):
+        check_in = data['check_in']
+        check_out = data['check_out']
+        studio = data['studio']
+        adults = data['adults']
+        children = data['children']
 
+        if  (adults+children) > studio.number_of_guests:
+            raise serializers.ValidationError("Room can't be booked for this number of guests")
+    
+        if timezone.now() > check_in:
+            raise serializers.ValidationError("check_in date must be today or later")
+        
+
+        if timezone.now() > check_out:
+            raise serializers.ValidationError("check_in date must be today or later")
+
+        if check_out < check_in:
+            raise serializers.ValidationError("check_out date must be later than check_in date")
+
+        return data
+
+     
+class SimpleReservationSerializer(serializers.ModelSerializer):
+    guest = SimpleGuestSerializer()
+    studio = SimpleStudioSerializer()
+    class Meta:
+        model = Reservation
+        fields= ['adults','children','check_in','check_out','studio','guest']
+
+
+       
 
 
 

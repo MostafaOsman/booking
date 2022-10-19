@@ -1,7 +1,7 @@
 from django.shortcuts import render
 from rest_framework.viewsets import ModelViewSet
 from booking.models import Guest, Reservation, Studio, Owner
-from booking.serializers import GuestSerializer, CreateOwnerSerializer, StudioSerializer, ReservationSerializer
+from booking.serializers import GuestSerializer, CreateOwnerSerializer, StudioSerializer, ReservationSerializer, SimpleReservationSerializer
 # Create your views here.
  
 
@@ -21,7 +21,12 @@ class CreateOwnerViewSet(ModelViewSet):
              
 
 class ReservationViewSet(ModelViewSet):
+    def get_serializer_class(self):
+        if self.request.method == 'POST':
+            return ReservationSerializer
+        elif self.request.method == 'GET':
+            return SimpleReservationSerializer    
     queryset = Reservation.objects.all() 
-    serializer_class= ReservationSerializer
+    
         
     
