@@ -10,7 +10,7 @@ from pprint import pprint
 
 router = routers.DefaultRouter()
 router.register('guest',views.GuestViewSet,'guest')
-router.register('studio',views.CreateStudioViewSet,'studio')
+router.register('studio',views.StudioViewSet,'studio')
 router.register('owner',views.CreateOwnerViewSet,'owner')
 router.register('reservation',views.ReservationViewSet,'reservation')
 
