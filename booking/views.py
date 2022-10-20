@@ -18,7 +18,7 @@ class StudioViewSet(ModelViewSet):
     
     http_method_names = ['get','post','patch','delete','head','options']
     def get_queryset(self):
-        return Studio.objects.filter(owner_id = self.request.user.id)
+        return Studio.objects.filter(id = self.request.user.id)
     
     def get_permissions(self):
         if self.request.method in ['PATCH','DELETE']:

@@ -1,3 +1,4 @@
+from argparse import ONE_OR_MORE
 from email.policy import default
 from time import timezone
 from typing import Generic
@@ -7,6 +8,10 @@ from django.contrib.contenttypes.fields import GenericForeignKey, GenericRelatio
 from django.db import models
 from django.core.validators import MaxValueValidator, MinValueValidator
 import uuid
+from django.contrib.auth.models import UserManager
+from django.conf import settings
+
+
 
 class Address(models.Model):
     city= models.CharField(max_length=255)
@@ -18,7 +23,7 @@ USER = get_user_model()
 
 class Guest(USER):
     address= models.ForeignKey(Address,on_delete= models.CASCADE)
-
+    
 class Owner(USER):
     pass
 

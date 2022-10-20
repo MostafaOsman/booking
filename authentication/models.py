@@ -18,7 +18,7 @@ class User(AbstractBaseUser,PermissionsMixin):
     (ROLE_HOST,'Host'),
     (ROLE_GUEST,'Guest'),
     (ROLE_ADMIN,'Admin')]
-       
+
     role = models.CharField(choices=ROLE_CHOICES,default=ROLE_GUEST,max_length=255)
     
     USERNAME_FIELD = 'username'
