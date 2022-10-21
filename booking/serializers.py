@@ -23,7 +23,8 @@ class GuestSerializer(serializers.ModelSerializer):
     class Meta:
         model = Guest 
         fields=['id','username','password','email','first_name','last_name','birth_date','role','address']
-        
+
+
     def create(self, validated_data):
         address_data = validated_data.pop('address')
         with transaction.atomic():

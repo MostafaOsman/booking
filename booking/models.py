@@ -19,12 +19,12 @@ class Address(models.Model):
     building_number= models.PositiveIntegerField()
    
 
-USER = get_user_model()
+User = get_user_model()
 
-class Guest(USER):
+class Guest(User):
     address= models.ForeignKey(Address,on_delete= models.CASCADE)
     
-class Owner(USER):
+class Owner(User):
     pass
 
 class Studio(models.Model):
