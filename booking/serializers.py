@@ -4,7 +4,7 @@ from wsgiref import validate
 from rest_framework import serializers
 from rest_framework.serializers import DecimalField
 from rest_framework.serializers import ModelSerializer
-from .models import Address, Owner, Studio, Guest, Reservation
+from .models import Address, Employee, Owner, Studio, Guest, Reservation
 from rest_framework import serializers
 from django.db import transaction
 from django.utils import timezone
@@ -22,7 +22,7 @@ class GuestSerializer(serializers.ModelSerializer):
     address = AddressSerializer()
     class Meta:
         model = Guest 
-        fields=['id','username','password','email','first_name','last_name','birth_date','role','address']
+        fields=['id','username','password','email','first_name','last_name','birth_date','address']
 
 
     def create(self, validated_data):
@@ -97,7 +97,14 @@ class StudioSerializer(serializers.ModelSerializer):
 class CreateOwnerSerializer(serializers.ModelSerializer):
     class Meta:
         model=  Owner
-        fields= ['id','username','password','email','first_name','last_name','birth_date','role']
+        fields= ['id','username','password','email','first_name','last_name','birth_date']
+
+class EmployeeSerializer(serializers.ModelSerializer):
+    class Meta:
+        model=  Employee
+        fields= ['id','username','password','email','first_name','last_name','birth_date','studio']
+
+    
 
 class SimpleOwnerSerializer(serializers.ModelSerializer):
        class Meta:
@@ -164,6 +171,12 @@ class SimpleReservationSerializer(serializers.ModelSerializer):
         model = Reservation
         fields= ['adults','children','check_in','check_out','studio','guest']
 
+
+class SimpleEmployeeSerializer(serializers.ModelSerializer):
+    studio= SimpleStudioSerializer(many=True)
+    class Meta:
+        model=  Employee
+        fields= ['id','username','password','email','first_name','last_name','birth_date','studio']
 
        
 

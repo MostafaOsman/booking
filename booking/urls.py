@@ -12,7 +12,12 @@ router = routers.DefaultRouter()
 router.register('guest',views.GuestViewSet,'guest')
 router.register('studio',views.StudioViewSet,'studio')
 router.register('owner',views.CreateOwnerViewSet,'owner')
+router.register('employee',views.EmployeeViewSet,'employee')
 router.register('reservation',views.ReservationViewSet,'reservation')
+
+employee_router = routers.NestedDefaultRouter(router, 'employee', lookup = 'employee')
+employee_router.register('studio', views.StudioViewSet, basename = 'employee-studio')
+
 
 
 

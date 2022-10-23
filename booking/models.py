@@ -27,6 +27,8 @@ class Guest(User):
 class Owner(User):
     pass
 
+
+
 class Studio(models.Model):
     title= models.CharField(max_length=255)
     number_of_guests= models.PositiveIntegerField(default=1)
@@ -38,7 +40,8 @@ class Studio(models.Model):
     def __str__(self) -> str:
         return self.title
     
-
+class Employee(User):
+    studio = models.ManyToManyField(Studio)
 
 class Reservation(models.Model):
     #a reservation can't be active for two guests on the same studio during the same period
